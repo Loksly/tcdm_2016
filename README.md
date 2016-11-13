@@ -182,7 +182,7 @@ Después cumplimentar con los siguientes datos (son modificables/personalizables
 	* Nivel de cluster: Estándar
 * Credenciales:
 	* Introducir contraseña de administrador  (_recordar este dato para conectarnos al servidor ambari_)
-	* Introducir nombre de usuario SSH (_recordar este dato para enviar el trabajo_)
+	* Introducir nombre de usuario SSH (_recordar este dato para enviar el trabajo_, en este ejemplo loksly)
 	* Introducir contraseña SSH (_recordar este dato para enviar el trabajo_)
 * Origen de datos:
 	* Método de selección: Desde todas las suscripciones
@@ -198,7 +198,43 @@ El proceso dura unos cuantos minutos.
 
 Mientras tanto podemos enviar los ficheros de prueba al almacenamiento.
 
-Para ello utilizamos el script:
+Para ello debemos seguir los siguientes pasos, ejecutados en la máquina local:
+
+0. El usuario ssh debe almacenarse en la variable $USERSSH,
+```bash
+USERSSH=loksly
+```
+
+1. obtener el listado de almacenamientos asociados a nuestro usuario en Azure.
+```bash
+azure storage account list
+```
+
+2. Seleccionamos la cuenta con la que queremos trabajar y almacenamos su valor en una variable:
+```bash
+storageaccount=CUENTA_DE_ENTRE_EL_LISTADO_PREVIO
+```
+
+3. Obtener la contraseña de acceso a ese almacenamiento
+```bash
+azure storage account keys list $storageaccount
+```
+
+4. Ahora almacenaremos la key en la variable con:
+```bash
+key=###################
+```
+
+5. Supuesto que estamos en el directorio previo al de los libros, procedemos a subir los libros con estos comandos, así:
+```bash
+files=`ls libros`
+cd libros
+for file in $files
+do
+	azure storage blob upload -a $storageaccount -k $key $file $insight user/$USERSSH/libros/$file
+done
+
+```
 
 
 Una vez hemos enviado los ficheros al sistema de almacenamiento y hemos comprobado que ha terminado de crearse el cluster creado
@@ -258,6 +294,21 @@ y seguimos estos pasos:
 	loksly@hn0-cluste:~/tcdm_2016-master$ hdfs dfs -put salidawc.txt salidawc
 	loksly@hn0-cluste:~/tcdm_2016-master$ hdfs dfs -put salidawcerr.txt salidawc
 ```
+![Yarn Insight](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/insight_yarn.png)
+
+
+Desde el panel de control de azure podemos acceder al resultado de la ejecución, tal y como muestra la imagen, dirigiéndonos al apartado relacionado con el almacenamiento.
+![Salida Insight](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/salida_insight.png)
+
+Una vez ha concluido la ejecución podemos proceder a la eliminación del cluster de Insight, de esta forma no consumirá recursos y el resultado
+de su procesamiento ha quedado almacenado fuera del mismo. Para ello podemos irnos al apartado del cluster (en nuestro caso llamado clustertest),
+y pulsar sobre el botón de *eliminar* situado en la parte superior derecha.
+
+![Eliminar Insight](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/eliminar_insight.png)
+
+Este proceso dura un rato, pero podemos ver que sigue procediendo a su eliminación por el mensaje de progreso situado en la parte superior derecha.
+![Eliminar Insight](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/eliminando_insight.png)
+
 
 
 
