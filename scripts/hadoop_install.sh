@@ -36,3 +36,17 @@ mkdir -p /var/log/hadoop/hdfs
 mkdir -p /var/log/hadoop/mapred
 chown -R hdmaster:hadoop /var/log/hadoop
 
+echo "10.0.0.4        namenode resourcemanager" >> /etc/hosts
+echo "10.0.0.5        checkpointnode jobhistoryserver" >> /etc/hosts
+echo "10.0.0.6        datanode1" >> /etc/hosts
+echo "10.0.0.7        datanode2" >> /etc/hosts
+echo "10.0.0.8        datanode3" >> /etc/hosts
+echo "10.0.0.9        datanode4" >> /etc/hosts
+echo "10.0.0.10       datanode5" >> /etc/hosts
+
+
+#Ahora sólo queda modificar el fichero /etc/ssh/ssh_config y poner el parámetro StrictHostKeyChecking a no.
+
+grep -v StrictHostKeyChecking /etc/ssh/ssh_config  > /tmp/ssh_config
+mv /tmp/ssh_config /etc/ssh/ssh_config
+echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
