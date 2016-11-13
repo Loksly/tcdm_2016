@@ -54,7 +54,7 @@ azure group create BaseInst -l westeurope
 
 Ahora vamos a crear una plantilla de máquina virtual que luego replicaremos varias veces para el despliegue de todos los nodos necesarios, para ello es necesario
 elegir un nombre de usuario y una contraseña segura (que tiene que tener al menos 8 caracteres, conteniendo al menos una minúscula, una mayúscula, un número y un signo de entre  !@#$%^&+=).
-Para el tipo de máquina virtual vamos a elegir _Standard_D1_v2_ pero es posible ver más alternativas en la web de [azure](https://azure.microsoft.com/es-es/documentation/articles/virtual-machines-windows-sizes/)
+Para el tipo de máquina virtual vamos a elegir _Standard_D1_v2_ pero es posible ver más alternativas en la web de [Azure](https://azure.microsoft.com/es-es/documentation/articles/virtual-machines-windows-sizes/)
 
 ```bash
 nombreusuario=el_que_se_quiera
@@ -63,7 +63,8 @@ tipovm=Standard_D1_v2
 azure vm quick-create -g BaseInst -n HadoopBase -y Linux -Q Debian -u $nombreusuario -p $pass  -z Standard_D1_v2 -l westeurope
 ```
 
-Al terminar se muestra un informe que incluye la IP de la nueva máquina virtual, aunque también es posible acceder al mismo desde [el panel de control de azure](https://portal.azure.com).
+Al terminar se muestra un informe que incluye la IP de la nueva máquina virtual (campo _Network Profile/Network Interfaces/Network Interface #1/Location/Public IP Address_),
+aunque también es posible acceder al mismo desde [el panel de control de Azure](https://portal.azure.com).
 Lo siguiente será descargarse el script que realiza la instalación de *Hadoop*, para ello realiza un ssh a la máquina recién creada y utiliza la contraseña seleccionada.
 
 ```bash
@@ -88,14 +89,17 @@ Otros ficheros de configuración son los ficheros $HADOOP_PREFIX/etc/hadoop/*-en
 
 * hadoop-env.sh:
 > JAVA_HOME: definidlo como /usr/lib/jvm/java-8-openjdk-amd64
+
 > HADOOP_LOG_DIR: directorio donde se guardan los logs de hdfs. Definidlo como /var/log/hadoop/hdfs
 
 * yarn-env.sh
 > JAVA_HOME: definidlo como /usr/lib/jvm/java-8-openjdk-amd64
+
 > YARN_LOG_DIR: directorio donde se guardan los logs de YARN. Definidlo como /var/log/hadoop/yarn
 
 * mapred-env.sh
 > JAVA_HOME: definidlo como /usr/lib/jvm/java-8-openjdk-and64
+
 > HADOOP_MAPRED_LOG_DIR: directorio donde se guardan los logs de MapReduce. Definidlo como /var/log/hadoop/mapred 
 
 
@@ -134,6 +138,10 @@ azure vm capture -g BaseInst -n HadoopBase -p TCDM1617 -t imagenbase-template.js
 En el ordenador local están disponibles dos scripts:
 * Para arrancar: https://github.com/Loksly/tcdm_2016/raw/master/scripts/wakeup.sh
 * Para parar: https://github.com/Loksly/tcdm_2016/raw/master/scripts/sleeps.sh
+
+
+![Estado de las máquinas arrancadas](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/nodos_encendidos.png)
+
 
 
 ## Copyright information
