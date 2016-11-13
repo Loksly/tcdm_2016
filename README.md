@@ -133,14 +133,76 @@ azure vm capture -g BaseInst -n HadoopBase -p TCDM1617 -t imagenbase-template.js
 
 
 
+
 ## Arrancar las VMs en cualquier momento o pararlas:
 
 En el ordenador local están disponibles dos scripts:
 * Para arrancar: https://github.com/Loksly/tcdm_2016/raw/master/scripts/wakeup.sh
 * Para parar: https://github.com/Loksly/tcdm_2016/raw/master/scripts/sleeps.sh
 
+## Arrancar Yarn y los data nodes.
+
+En el equipo NameNode, nos conectamos con un ```ssh usuario@namenode```, y después cambiamos de usuario con:
+```bash
+sudo su - hdmaster
+cd
+wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/namenode-run.sh"
+wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/namenode-stop.sh"
+bash namenode-run.sh
+#para pararlo: bash namenode-stop.sh
+```
+
+Y ahora con el equipo checkpointnode, nos conectamos con un ```ssh usuario@checkpointnode```, y después cambiamos de usuario con:
+```bash
+sudo su - hdmaster
+cd
+wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/checkpointnode-run.sh"
+wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/checkpointnode-stop.sh"
+bash checkpointnode-run.sh
+#para pararlo: bash checkpointnode-stop.sh
+```
+
+
+
 
 ![Estado de las máquinas arrancadas](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/nodos_encendidos.png)
+
+Las capturas de las interfaces web del HDFS, YARN, CheckPoint Node y JobHistory están disponibles en:
+* [HDFS](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/hdfs.png)
+* [YARN](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/yarn_QuasiMonteCarlo.pdf)
+* [JobHistory](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/jobhistory.png)
+* [CheckpointNode](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/jobhistory.png)
+
+
+
+Resultado de la ejecución
+```txt
+a	45639
+aa	1038
+aachen	965
+aaliyah	2063
+aardvark	2056
+aardvarks	992
+aaron	1005
+ab	1019
+aba	8
+abaci	1032
+aback	1049
+abacus	2031
+abacuses	989
+abad	70
+abade	2
+abadejo	4
+abades	11
+abadesa	33
+abadesas	1
+abadía	7
+abaft	990
+abaja	1
+abajada	1
+abajan	1
+abajar	7
+```
 
 
 
