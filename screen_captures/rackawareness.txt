@@ -1,0 +1,89 @@
+hdmaster@NameNode:~$ hdfs dfsadmin -report
+Safe mode is ON
+Configured Capacity: 126286282752 (117.61 GB)
+Present Capacity: 113223499776 (105.45 GB)
+DFS Remaining: 102980100096 (95.91 GB)
+DFS Used: 10243399680 (9.54 GB)
+DFS Used%: 9.05%
+Under replicated blocks: 0
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+Missing blocks (with replication factor 1): 0
+
+-------------------------------------------------
+Live datanodes (4):
+
+Name: 10.0.0.6:50010 (datanode1)
+Hostname: datanode1
+Rack: /rack1
+Decommission Status : Normal
+Configured Capacity: 31571570688 (29.40 GB)
+DFS Used: 3210465280 (2.99 GB)
+Non DFS Used: 3265912832 (3.04 GB)
+DFS Remaining: 25095192576 (23.37 GB)
+DFS Used%: 10.17%
+DFS Remaining%: 79.49%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Nov 13 22:03:31 UTC 2016
+
+
+Name: 10.0.0.7:50010 (datanode2)
+Hostname: datanode2
+Rack: /rack1
+Decommission Status : Normal
+Configured Capacity: 31571570688 (29.40 GB)
+DFS Used: 3038068736 (2.83 GB)
+Non DFS Used: 3267444736 (3.04 GB)
+DFS Remaining: 25266057216 (23.53 GB)
+DFS Used%: 9.62%
+DFS Remaining%: 80.03%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Nov 13 22:03:31 UTC 2016
+
+
+Name: 10.0.0.10:50010 (datanode5)
+Hostname: datanode5
+Rack: /rack2
+Decommission Status : Normal
+Configured Capacity: 31571570688 (29.40 GB)
+DFS Used: 1049755648 (1001.13 MB)
+Non DFS Used: 3263705088 (3.04 GB)
+DFS Remaining: 27258109952 (25.39 GB)
+DFS Used%: 3.33%
+DFS Remaining%: 86.34%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Nov 13 22:03:30 UTC 2016
+
+
+Name: 10.0.0.9:50010 (datanode4)
+Hostname: datanode4
+Rack: /rack2
+Decommission Status : Normal
+Configured Capacity: 31571570688 (29.40 GB)
+DFS Used: 2945110016 (2.74 GB)
+Non DFS Used: 3265720320 (3.04 GB)
+DFS Remaining: 25360740352 (23.62 GB)
+DFS Used%: 9.33%
+DFS Remaining%: 80.33%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Nov 13 22:03:30 UTC 2016
