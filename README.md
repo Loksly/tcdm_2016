@@ -243,8 +243,8 @@ Como prueba de la ejecución de los benchmark podemos utilizar esta captura de p
 
 En este caso vamos a dar de alta un nuevo nodo, para ello tendremos que registrar otra interfaz de red con IP interna 10.0.0.10 y otra máquina virtual basada en la plantilla, modificando el archivo json correspondiente para reflejar la nueva interfaz, y poniendo como nombre DataNode5.
 
-1. Paramos los demonios con el script stop.sh, y 
-2. Creamos cuatro ficheros: $HADOOP_PREFIX/etc/hadoop/dfs.include, $HADOOP_PREFIX/etc/hadoop/dfs.exclude, $HADOOP_PREFIX/etc/hadoop/yarn.include y $HADOOP_PREFIX/etc/hadoop/yarn.exclude (inicialmente vacíos).
+1. Paramos los demonios con el script namenode-stop.sh, y checkpointnode-stop.sh (en el checkpoint node)
+2. En el namenode creamos cuatro ficheros: $HADOOP_PREFIX/etc/hadoop/dfs.include, $HADOOP_PREFIX/etc/hadoop/dfs.exclude, $HADOOP_PREFIX/etc/hadoop/yarn.include y $HADOOP_PREFIX/etc/hadoop/yarn.exclude (inicialmente vacíos).
 3. En los fichero dfs.include y yarn.include, ponemos los nombres de todos los DataNodes/NodeManagers que querramos que estén en el cluster.
 4. En el fichero de configuración *hdfs-site.xml*, añadimos dos propiedades:
 
@@ -283,14 +283,20 @@ echo "10.0.0.10" >> >/opt/yarn/hadoop/etc/hadoop/slaves
 
 Reiniciamos los demonios:
 ```bash
-bash stop.sh
-bash start.sh
+bash namenode-start.sh
+```
+Nos vamos al checknode y arrancamos también:
+```bash
+bash checkpointnode-start.sh
+```
+
+Ahora de vuelta a namenode:
+```bash
 hdfs dfsadmin -refreshNodes
 yarn rmadmin -refreshNodes
 ```
 
 ![PrevioArranque](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/previo_arranque.png)
-
 
 
 Ahora vamos a proceder a quitar un nodo, por ejemplo el nodo datanode3, 10.0.0.8, para ello lo ponemos en los ficheros .exclude que acabamos de crear e informamos a los demonios del cambio mediante:
@@ -302,12 +308,10 @@ yarn rmadmin -refreshNodes
 ![Decomission](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/decomission.png)
 
 
-Ahora podríamos quitarlo del fichero slaves (aunque deberíamos apagar previamente sus demonios).
-
+Ahora podríamos quitarlo del fichero slaves (aunque deberíamos apagar previamente sus demonios para que se apague correctamente).
 
 
 ### Rack Awareness
-
 
 Para llevar a cabo esta funcionalidad hay que crear un fichero _/opt/yarn/hadoop/etc/hadoop/topology.data_ con este contenido:
 ```bash
