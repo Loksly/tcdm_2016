@@ -1,6 +1,5 @@
-# TCDM
-### https://github.com/Loksly/tcdm_2016
-
+# Práctica 1: Instalación de cluster de Hadoop
+### El contenido de este documento está disponible en https://github.com/Loksly/tcdm_2016
 
 ## Introducción
 
@@ -127,14 +126,40 @@ azure vm generalize -g BaseInst -n HadoopBase
 Captura la imagen y una plantilla local para lanzar las nuevas máquinas
 ```bash
 azure vm capture -g BaseInst -n HadoopBase -p TCDM1617 -t imagenbase-template.json
+azure group create -n HadoopGroup -l westeurope
+azure network vnet create -a 10.0.0.0/8 -g HadoopGroup -n HadoopVnet -l westeurope
+azure network vnet subnet create -a 10.0.0.0/24 -g HadoopGroup -e HadoopVnet -n HadoopSubnet
 ```
 
+
+Para registrar una nueva máquina virtual con su interfaz de red es necesario ejecutar estos pasos:
+```bash
+azure network public-ip create -g HadoopGroup -n NameNodeIP --allocation-method Static -l westeurope
+azure network nic create -a 10.0.0.4 -g HadoopGroup -n NameNodeNIC -m HadoopVnet -k HadoopSubnet -p NameNodeIP -l westeurope
+```
+
+Es necesario clonar el fichero _imagenbase-template.json_ y modificar los valores de los campos: _vmName_, _adminUsername_ y _adminPassword_, así como el campo _networkInterfaceId_ con el obtenido con el comando anterior, asignarle un nombre y luego desplegar la VM así: 
+```bash
+azure group deployment create -g HadoopGroup -n NameNode -f ./namenode-template.json
+```
+
+Hay que repetir este proceso para el checkpoint node modificando en donde sea necesario.
+
+Para desplegar los datanodes se puede usar el script disponible en:
+https://github.com/Loksly/tcdm_2016/blob/master/scripts/deploynodes.py
+
+Una vez se ha concluido el proceso y para reducir el consumo de recursos es conveniente eliminar la máquina virtual HadoopBase:
+```bash
+azure vm delete -g BaseInst -n HadoopBase
+```
 
 ## Arrancar las VMs en cualquier momento o pararlas:
 
 En el ordenador local están disponibles dos scripts:
 * Para arrancar: https://github.com/Loksly/tcdm_2016/raw/master/scripts/wakeup.sh
 * Para parar: https://github.com/Loksly/tcdm_2016/raw/master/scripts/sleeps.sh
+
+Nota: es posible que muestre un error relacionado con el DataNode5, si aún no se ha creado, se creará posteriormente.
 
 ## Arrancar Yarn y los data nodes.
 
@@ -168,10 +193,9 @@ Las capturas de las interfaces web del HDFS, YARN, CheckPoint Node y JobHistory 
 * [CheckpointNode](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/checkpointnode.png)
 
 
-
 Para ejecutar la aplicación, es necesario descargar el fichero de Mega, pero en vez de descargarlo en local y luego subirlo,
 es más fácil instalar curl (mediante un sudo apt-get install curl -y)
-y luego ejecutar el comando, como usuario normal:
+y luego ejecutar el comando, como usuario normal (loksly en este caso):
 ```bash
 wget -O mega.sh "http://pastebin.com/raw/JNZ0VUpi"
 bash mega.sh 'https://mega.nz/#!T4lhjDqI!7qJXHdkffuZrrbZIgYfaeiwMnI53PEnlO-Wo_qgTbt4' libros.tar.gz
@@ -181,7 +205,7 @@ wget "https://github.com/Loksly/tcdm_2016/blob/master/wordcount-0.0.1-SNAPSHOT.j
 yarn jar wordcount-0.0.1-SNAPSHOT.jar libros salidawc
 ```
 
-Una vez terminado el fichero de salida estará disponible en el directorio salidawc de HDF, con nombre *part-r-00000*, podemos ver aquí un pequeño extracto del mismo:
+Una vez terminado el fichero de salida estará disponible en el directorio salidawc de HDF, con nombre [part-r-00000](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/part-r-00000), del que podemos ver aquí un pequeño extracto del mismo:
 ```txt
 a	45639
 aa	1038
