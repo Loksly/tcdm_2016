@@ -1,0 +1,44 @@
+<configuration>
+  <property>
+    <!-- Framework que realiza el MapReduce -->
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Memoria maxima (MB) por map (por defecto: 1536) -->
+    <name>mapreduce.map.memory.mb</name>
+    <value>1536</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Memoria maxima (MB) por reduce (por defecto: 3072)-->
+    <name>mapreduce.reduce.memory.mb</name>
+    <value>3072</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Heap maximo para las JVM de los maps (por defecto: -Xmx1024M)-->
+    <name>mapreduce.map.java.opts</name>
+    <value>-Xmx1024M</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Heap maxima para las JVM de los reduces (por defecto: -Xmx2560M)-->
+    <name>mapreduce.reduce.java.opts</name>
+    <value>-Xmx2048M</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- El JobHistory Server -->
+    <name>mapreduce.jobhistory.address</name>
+    <value>jobhistoryserver:10020</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Interfaz web del JobHistory Server -->
+    <name>mapreduce.jobhistory.webapp.address</name>
+    <value>jobhistoryserver:19888</value>
+    <final>true</final>
+  </property>
+</configuration>  

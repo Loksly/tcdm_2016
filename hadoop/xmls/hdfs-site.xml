@@ -1,0 +1,54 @@
+<configuration>
+ <property>
+   <!-- Factor de replicacion de los bloques -->
+    <name>dfs.replication</name>
+    <value>3</value>
+    <final>true</final>
+  </property>
+  <property>
+   <!-- Tamano del bloque (por defecto 128m) -->
+    <name>dfs.blocksize</name>
+    <value>64m</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Lista (separada por comas) de directorios donde el namenode guarda los metadatos. 
+         En un sistema real debería incluir por lo menos dos directorios:
+         uno en el disco local del namenode y otro remoto montado por NFS -->
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///var/data/hadoop/hdfs/nn</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Lista (separada por comas) de directorios donde el checkpoint node guarda los checkpoints.
+         Igual que el el dfs.namenode.name.dir, deberían indicarse un directorio local y uno remoto -->
+    <name>fs.checkpoint.dir</name>
+    <value>file:///var/data/hadoop/hdfs/cpn</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Lista (separada por comas) de directorios donde el checkpoint node guarda los edits temporales -->
+    <name>fs.checkpoint.edits.dir</name>
+    <value>file:///var/data/hadoop/hdfs/cpn</value>
+    <final>true</final>
+  </property>
+    <!-- Lista (separada por comas) de directorios donde los datanodes guardan los datos: 
+         por rendimiento, si los nodos tiene varios discos es conveniente 
+         especificar un directorio en cada uno de los discos locales -->
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///var/data/hadoop/hdfs/dn</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Dirección y puerto del interfaz web del namenode -->
+    <name>dfs.namenode.http-address</name>
+    <value>namenode:50070</value>
+    <final>true</final>
+  </property>
+  <property>
+    <!-- Dirección y puerto del interfaz web del checkpoint node (aka secondary namenode) -->
+    <name>dfs.namenode.secondary.http-address</name>
+    <value>checkpointnode:50090</value>
+    <final>true</final>
+  </property>
+ </configuration>
