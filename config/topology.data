@@ -1,0 +1,8 @@
+10.0.0.6     /rack1
+10.0.0.7     /rack1
+10.0.0.9     /rack2
+10.0.0.10    /rack2
+datanode1    /rack1
+datanode2    /rack1
+datanode4    /rack2
+datanode5    /rack2

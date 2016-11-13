@@ -1,0 +1,127 @@
+hdmaster@NameNode:/opt/yarn$ yarn rmadmin -refreshNodes
+16/11/13 20:32:59 INFO client.RMProxy: Connecting to ResourceManager at resourcemanager/10.0.0.4:8033
+hdmaster@NameNode:/opt/yarn$ hdfs dfsadmin -report
+Safe mode is ON
+Configured Capacity: 2378457088 (2.22 GB)
+Present Capacity: 2378457088 (2.22 GB)
+DFS Remaining: 0 (0 B)
+DFS Used: 2378457088 (2.22 GB)
+DFS Used%: 100.00%
+Under replicated blocks: 0
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+Missing blocks (with replication factor 1): 0
+
+-------------------------------------------------
+Live datanodes (1):
+
+Name: 10.0.0.8:50010 (datanode3)
+Hostname: datanode3
+Decommission Status : Decommission in progress
+Configured Capacity: 31571570688 (29.40 GB)
+DFS Used: 2378457088 (2.22 GB)
+Non DFS Used: 3264991232 (3.04 GB)
+DFS Remaining: 25928122368 (24.15 GB)
+DFS Used%: 7.53%
+DFS Remaining%: 82.12%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Nov 13 20:33:13 UTC 2016
+
+
+Dead datanodes (4):
+
+Name: 10.0.0.6:50010 (datanode1)
+Hostname: datanode1
+Decommission Status : Normal
+Configured Capacity: 0 (0 B)
+DFS Used: 0 (0 B)
+Non DFS Used: 0 (0 B)
+DFS Remaining: 0 (0 B)
+DFS Used%: 100.00%
+DFS Remaining%: 0.00%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Thu Jan 01 00:00:00 UTC 1970
+
+
+Name: 10.0.0.7:50010 (datanode2)
+Hostname: datanode2
+Decommission Status : Normal
+Configured Capacity: 0 (0 B)
+DFS Used: 0 (0 B)
+Non DFS Used: 0 (0 B)
+DFS Remaining: 0 (0 B)
+DFS Used%: 100.00%
+DFS Remaining%: 0.00%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Thu Jan 01 00:00:00 UTC 1970
+
+
+Name: 10.0.0.9:50010 (datanode4)
+Hostname: datanode4
+Decommission Status : Normal
+Configured Capacity: 0 (0 B)
+DFS Used: 0 (0 B)
+Non DFS Used: 0 (0 B)
+DFS Remaining: 0 (0 B)
+DFS Used%: 100.00%
+DFS Remaining%: 0.00%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Thu Jan 01 00:00:00 UTC 1970
+
+
+Name: 10.0.0.10:50010 (datanode5)
+Hostname: datanode5
+Decommission Status : Normal
+Configured Capacity: 0 (0 B)
+DFS Used: 0 (0 B)
+Non DFS Used: 0 (0 B)
+DFS Remaining: 0 (0 B)
+DFS Used%: 100.00%
+DFS Remaining%: 0.00%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Thu Jan 01 00:00:00 UTC 1970
+
+
+Decommissioning datanodes (1):
+
+Name: 10.0.0.8:50010 (datanode3)
+Hostname: datanode3
+Decommission Status : Decommission in progress
+Configured Capacity: 31571570688 (29.40 GB)
+DFS Used: 2378457088 (2.22 GB)
+Non DFS Used: 3264991232 (3.04 GB)
+DFS Remaining: 25928122368 (24.15 GB)
+DFS Used%: 7.53%
+DFS Remaining%: 82.12%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Nov 13 20:33:13 UTC 2016
