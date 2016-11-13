@@ -15,7 +15,7 @@ Pasos llevados a cabo:
 - [x] 2. Ejecutar el programa WordCount en Java en el cluster
 - [x] 3. Ejecutar benchmarks para HDFS y MapReduce en el cluster
 - [x] 4. Añadir y retirar nodos del cluster Hadoop
-- [ ] 5. Hacer que el cluster sea rack-aware
+- [x] 5. Hacer que el cluster sea rack-aware
 
 
 ## Parte opcional:
@@ -201,13 +201,6 @@ abade	2
 abadejo	4
 abades	11
 abadesa	33
-abadesas	1
-abadía	7
-abaft	990
-abaja	1
-abajada	1
-abajan	1
-abajar	7
 ```
 
 ### Ejecutar los benchmarks
@@ -222,12 +215,77 @@ Como prueba de la ejecución de los benchmark podemos utilizar esta captura de p
 ![JobHistory](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/jobhistory.png)
 
 
+### Añadir y retirar datanodos/jobtrackers
+
+En este caso vamos a dar de alta un nuevo nodo, para ello tendremos que registrar otra interfaz de red con IP interna 10.0.0.10 y otra máquina virtual basada en la plantilla, modificando el archivo json correspondiente para reflejar la nueva interfaz, y poniendo como nombre DataNode5.
+
+1. Paramos los demonios con el script stop.sh, y 
+2. Creamos cuatro ficheros: $HADOOP_PREFIX/etc/hadoop/dfs.include, $HADOOP_PREFIX/etc/hadoop/dfs.exclude, $HADOOP_PREFIX/etc/hadoop/yarn.include y $HADOOP_PREFIX/etc/hadoop/yarn.exclude (inicialmente vacíos).
+3. En los fichero dfs.include y yarn.include, ponemos los nombres de todos los DataNodes/NodeManagers que querramos que estén en el cluster.
+4. En el fichero de configuración *hdfs-site.xml*, añadimos dos propiedades:
+
+```xml
+<property>
+	<name>dfs.hosts</name>
+	<value>/opt/yarn/hadoop/etc/hadoop/dfs.include</value>
+	<final>true</final>
+</property>
+<property>
+	<name>dfs.hosts.exclude</name>
+	<value>/opt/yarn/hadoop/etc/hadoop/dfs.exclude</value>
+	<final>true</final>
+</property>
+```
+
+
+En el fichero *yarn-site.xml*, añadimos dos propiedades:
+```xml
+<property>
+	<name>yarn.resourcemanager.nodes.include-path</name>
+	<value>/opt/yarn/hadoop/etc/hadoop/yarn.include</value>
+	<final>true</final>
+</property>
+<property>
+	<name>yarn.resourcemanager.nodes.include-path</name>
+	<value>/opt/yarn/hadoop/etc/hadoop/yarn.exclude</value>
+	<final>true</final>
+</property>
+```
+
+Añadimos en el fichero slaves la nueva ip, en una nueva línea:
+```bash
+echo "10.0.0.10" >> >/opt/yarn/hadoop/etc/hadoop/slaves
+```
+
+Reiniciamos los demonios:
+```bash
+bash stop.sh
+bash start.sh
+hdfs dfsadmin -refreshNodes
+yarn rmadmin -refreshNodes
+```
+
+![PrevioArranque](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/previo_arranque.png)
+
+
+
+Ahora vamos a proceder a quitar un nodo, por ejemplo el nodo datanode3, 10.0.0.8, para ello lo ponemos en los ficheros .exclude que acabamos de crear e informamos a los demonios del cambio mediante:
+```bash
+hdfs dfsadmin -refreshNodes
+yarn rmadmin -refreshNodes
+```
+
+![Decomission](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/decomission.png)
+
+
+Ahora podríamos quitarlo del fichero slaves (aunque deberíamos apagar previamente sus demonios).
+
 
 
 ### Rack Awareness
 
 
-Hay que crear un fichero _/opt/yarn/hadoop/etc/hadoop/topology.data_ con este contenido:
+Para llevar a cabo esta funcionalidad hay que crear un fichero _/opt/yarn/hadoop/etc/hadoop/topology.data_ con este contenido:
 ```bash
 10.0.0.6     /rack1
 10.0.0.7     /rack1
@@ -239,7 +297,7 @@ datanode4    /rack2
 datanode5    /rack2
 ```
 
-Descargar el fichero topology.script
+Descargar el fichero topology.script y ponerlo como ejecutable
 ```bash
 cd /opt/yarn/hadoop/etc/hadoop/
 wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/topology.script"
