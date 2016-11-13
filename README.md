@@ -130,10 +130,6 @@ azure vm capture -g BaseInst -n HadoopBase -p TCDM1617 -t imagenbase-template.js
 ```
 
 
-
-
-
-
 ## Arrancar las VMs en cualquier momento o pararlas:
 
 En el ordenador local están disponibles dos scripts:
@@ -163,19 +159,29 @@ bash checkpointnode-run.sh
 ```
 
 
-
-
 ![Estado de las máquinas arrancadas](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/nodos_encendidos.png)
 
 Las capturas de las interfaces web del HDFS, YARN, CheckPoint Node y JobHistory están disponibles en:
 * [HDFS](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/hdfs.png)
 * [YARN](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/yarn_QuasiMonteCarlo.pdf)
 * [JobHistory](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/jobhistory.png)
-* [CheckpointNode](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/jobhistory.png)
+* [CheckpointNode](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/checkpointnode.png)
 
 
 
-Resultado de la ejecución
+Para ejecutar la aplicación, es necesario descargar el fichero de Mega, pero en vez de descargarlo en local y luego subirlo,
+es más fácil instalar curl (mediante un sudo apt-get install curl -y)
+y luego ejecutar el comando, como usuario normal:
+```bash
+wget -O mega.sh "http://pastebin.com/raw/JNZ0VUpi"
+bash mega.sh 'https://mega.nz/#!T4lhjDqI!7qJXHdkffuZrrbZIgYfaeiwMnI53PEnlO-Wo_qgTbt4' libros.tar.gz
+tar xvf AERqiL7XHKcX3EXBwMTmXgTmMPZX
+hdfs dfs -put libros .
+wget "https://github.com/Loksly/tcdm_2016/blob/master/wordcount-0.0.1-SNAPSHOT.jar"
+yarn jar wordcount-0.0.1-SNAPSHOT.jar libros salidawc
+```
+
+Una vez terminado el fichero de salida estará disponible en el directorio salidawc de HDF, con nombre *part-r-00000*, podemos ver aquí un pequeño extracto del mismo:
 ```txt
 a	45639
 aa	1038
@@ -203,6 +209,59 @@ abajada	1
 abajan	1
 abajar	7
 ```
+
+### Ejecutar los benchmarks
+
+Para ejecutar los benchmarks tan sólo es necesario, como usuario hdmaster:
+```bash
+wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/run_benchmarks.bash" #descargar el script 
+bash run_benchmarks.bash
+```
+
+Como prueba de la ejecución de los benchmark podemos utilizar esta captura de pantalla:
+![JobHistory](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/jobhistory.png)
+
+
+
+
+### Rack Awareness
+
+
+Hay que crear un fichero _/opt/yarn/hadoop/etc/hadoop/topology.data_ con este contenido:
+```bash
+10.0.0.6     /rack1
+10.0.0.7     /rack1
+10.0.0.9     /rack2
+10.0.0.10    /rack2
+datanode1    /rack1
+datanode2    /rack1
+datanode4    /rack2
+datanode5    /rack2
+```
+
+Descargar el fichero topology.script
+```bash
+cd /opt/yarn/hadoop/etc/hadoop/
+wget "https://github.com/Loksly/tcdm_2016/blob/master/scripts/topology.script"
+chmod +x topology.script
+```
+
+y modificar el fichero core.xml, para añadirle esta propiedad:
+```xml
+<property>
+	<name>net.topology.script.file.name</name>
+	<value>/opt/yarn/hadoop/etc/hadoop/topology.script</value>
+	<final>true</final>
+</property>
+```
+
+Al hacerlo reiniciamos los demonios con el script stop.sh y el script start.sh,
+y podemos ver el resultado ejecutando:
+```bash
+hdfs dfsadmin -printTopology
+```
+![RackAwareness](https://github.com/Loksly/tcdm_2016/blob/master/screen_captures/rackawareness.png)
+
 
 
 
