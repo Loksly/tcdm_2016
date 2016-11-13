@@ -1,0 +1,9 @@
+echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bashrc
+echo "export HADOOP_PREFIX=/opt/yarn/hadoop" >> ~/.bashrc
+echo "export PATH=$PATH:$HADOOP_PREFIX/bin" >> ~/.bashrc
+
+source ~/.bashrc
+
+ssh-keygen -t dsa -P '' -f ~/.ssh/id_dsa
+cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+chmod 644 ~/.ssh/authorized_keys
