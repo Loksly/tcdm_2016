@@ -67,10 +67,15 @@ echo 'Now you can see the directory has been deleted with all it's contents'
 
 ## Parte opcional (puntúa positivamente en la nota final)
 
-- [ ] Utiliza los ejemplos de http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/WebHDFS.html para, usando WebHDFS, desde tu PC crear un nuevo directorio en el directorio del usuario no provilegiado (no hdmaster= en HDFS y copiar un fichero de tu PC a ese directorio. El Host_Name es el NameNode y el Port el 50070.
+- [x] Utiliza los ejemplos de http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/WebHDFS.html para, usando WebHDFS, desde tu PC crear un nuevo directorio en el directorio del usuario no provilegiado (no hdmaster= en HDFS y copiar un fichero de tu PC a ese directorio. El Host_Name es el NameNode y el Port el 50070.
 
 ```bash
-curl -i -X PUT "http://namenode:50070/webhdfs/v1/testdirectory?op=MKDIRS"
+curl http://loripsum.net/api/10000/verylong/plaintext
+curl -i -X PUT "http://namenode:50070/webhdfs/v1/testdirectory2?op=MKDIRS" 
+location=`curl -i -X PUT "http://namenode:50070/webhdfs/v1/tmp/testfile?op=CREATE&overwrite=true" 2>/dev/null |grep Location | sed s/'Location: '//`
+curl -i -X PUT -T plaintext $location
+#then test it has been uploaded
+hdfs dfs -cat /tmp/testfile
 ```
 
 === Fuentes
