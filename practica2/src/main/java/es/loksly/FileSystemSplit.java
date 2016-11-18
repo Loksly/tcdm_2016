@@ -28,11 +28,11 @@ public class FileSystemSplit {
 				.version("0.1")
 				.description("Copy and trim files between filesystems.");
 			parser
-				.addArgument("-f", "--from")
+				.addArgument("-i", "--in")
 				.required(true)
 				.help("Specify origin file");
 			parser
-				.addArgument("-t", "--to")
+				.addArgument("-o", "--out")
 				.required(true)
 				.help("Specify destination file");
 			parser
@@ -71,13 +71,13 @@ public class FileSystemSplit {
 
 			Configuration conf = new Configuration();
 
-			String originstr = ns.getString("from");
-			String deststr = ns.getString("to");
+			String originstr = ns.getString("in");
+			String deststr = ns.getString("out");
 			boolean force = (ns.get("f") == null);
 			boolean progress = (ns.get("progress") == null);
 
 			if (originstr == null || deststr == null){
-				System.err.println("Source and destination files must be specified. Check the --from and the --to parameter.");
+				System.err.println("Both source and destination files must be specified. Check the --in and the --out parameter.");
 				System.exit(2);
 			}
 
@@ -94,11 +94,11 @@ public class FileSystemSplit {
 				FileStatus destination = destfs.getFileStatus(new Path(deststr));
 				
 				if (source == null){
-					System.err.println("Source file must exist. Check --from parameter.");
+					System.err.println("Source file must exist. Check --in parameter.");
 					System.exit(3);
 				}
 				if (source.isDirectory()) {
-					System.err.println("Source must be a file. Check --from parameter.");
+					System.err.println("Source must be a file. Check --in parameter.");
 					System.exit(4);
 				}
 
@@ -165,13 +165,3 @@ public class FileSystemSplit {
 			}
 	}
 }
-/*
-https://argparse4j.github.io/
-
-Maven dependency
-<dependency>
-  <groupId>net.sourceforge.argparse4j</groupId>
-  <artifactId>argparse4j</artifactId>
-  <version>0.7.0</version>
-</dependency>
-*/
