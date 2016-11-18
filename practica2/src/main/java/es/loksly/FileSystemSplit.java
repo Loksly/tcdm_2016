@@ -8,11 +8,13 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.util.Progressable;
 
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+
 
 import org.apache.hadoop.io.IOUtils;
 
@@ -37,6 +39,10 @@ public class FileSystemSplit {
 				.addArgument("-f")
 				.required(false)
 				.help("Specify what happens if the file exists. If the parameter is present then the file should be replaced.");
+			parser
+				.addArgument("--progress")
+				.required(false)
+				.help("Show progress bar.");
 			parser
 				.addArgument("-p", "--percentage")
 				.setDefault("100")
@@ -68,6 +74,7 @@ public class FileSystemSplit {
 			String originstr = ns.getString("from");
 			String deststr = ns.getString("to");
 			boolean force = (ns.get("f") == null);
+			boolean progress = (ns.get("progress") == null);
 
 			if (originstr == null || deststr == null){
 				System.err.println("Source and destination files must be specified. Check the --from and the --to parameter.");
@@ -127,8 +134,16 @@ public class FileSystemSplit {
 				long startbyte = length * start;
 				long endbyte = length * until;
 
-				out = destfs.create(name);
-
+				if (progress){
+					out = destfs.create(new Path(deststr), new Progressable() {
+						@Override
+						public void progress() {
+							System.out.println(".");
+						}
+					});
+				}else {
+					out = destfs.create(new Path(deststr));
+				}
 				in = originfs.open(new Path( originuri) );
 
 				FSDataInputStream fis = new FSDataInputStream(in);
