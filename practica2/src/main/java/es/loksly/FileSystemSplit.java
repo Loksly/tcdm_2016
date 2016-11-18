@@ -1,9 +1,13 @@
 package es.loksly;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.FSDataInputStream;
 import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
 
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -12,14 +16,14 @@ import net.sourceforge.argparse4j.inf.Namespace;
 
 import org.apache.hadoop.io.IOUtils;
 
-public class FileSystemCat {
+public class FileSystemSplit {
 	public static void main( String [ ] args )
 		throws Exception {
 
 			ArgumentParser parser = ArgumentParsers
 				.newArgumentParser("FileSystemCat")
 				.defaultHelp(true)
-				.description("Copy and trim files between filesystems. Usage: java -jar FileSystemCat -f origin -t destination [-p 100]? [-s 0]?");
+				.description("Copy and trim files between filesystems.");
 			parser
 				.addArgument("-f", "--from")
 				.required(true)
@@ -56,10 +60,10 @@ public class FileSystemCat {
 
 			Configuration conf = new Configuration();
 
-			String originstr = ns.get("from");
-			String deststr = ns.get("to");
+			String originstr = ns.getString("from");
+			String deststr = ns.getString("to");
 
-			if (originstr === null || deststr === null){
+			if (originstr == null || deststr == null){
 				System.err.println("Source and destination files must be specified. Check the --from and the --to parameter.");
 				System.exit(2);
 			}
@@ -71,20 +75,20 @@ public class FileSystemCat {
 				URI desturi = URI.create(deststr);
 
 				FileSystem originfs = FileSystem.get( originuri, conf ) ;
-				FileStatus source = localFS.getFileStatus(new Path(originstr));
+				FileStatus source = originfs.getFileStatus(new Path(originstr));
 				
-				if (!source){
+				if (source == null){
 					System.err.println("Source file must exist. Check --from parameter.");
 					System.exit(3);
 				}
-				if (source.isDir()) {
+				if (source.isDirectory()) {
 					System.err.println("Source must be a file. Check --from parameter.");
 					System.exit(4);
 				}
 
-				int percentage = Integer.intValue(ns.get('percentage'));
-				int start = Integer.intValue(ns.get('start'));
-/*				int buffer = Integer.intValue(ns.get('buffer')); */
+				int percentage = ns.getInt("percentage");
+				int start = ns.getInt("start");
+/*				int buffer = ns.getInt('buffer'); */
 
 				if (start < 0){
 					System.err.println("Bad start percentage. Check --start parameter.");
@@ -109,7 +113,7 @@ public class FileSystemCat {
 				long startbyte = length * start;
 				long endbyte = length * until;
 
-				in = fs.open(new Path( originuri) );
+				in = originfs.open(new Path( originuri) );
 
 				FSDataInputStream fis = new FSDataInputStream(in);
 				fis.seek(startbyte);
@@ -123,7 +127,7 @@ public class FileSystemCat {
 				System.err.println(e);
 				System.exit(100);
 			} finally {
-				if (in){
+				if (in != null){
 					IOUtils.closeStream( in ) ;
 				}
 			}
