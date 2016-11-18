@@ -21,8 +21,9 @@ public class FileSystemSplit {
 		throws Exception {
 
 			ArgumentParser parser = ArgumentParsers
-				.newArgumentParser("FileSystemCat")
+				.newArgumentParser("FileSystemSplit")
 				.defaultHelp(true)
+				.version("0.1")
 				.description("Copy and trim files between filesystems.");
 			parser
 				.addArgument("-f", "--from")
@@ -32,6 +33,10 @@ public class FileSystemSplit {
 				.addArgument("-t", "--to")
 				.required(true)
 				.help("Specify destination file");
+			parser
+				.addArgument("-f")
+				.required(false)
+				.help("Specify what happens if the file exists. If the parameter is present then the file should be replaced.");
 			parser
 				.addArgument("-p", "--percentage")
 				.setDefault("100")
@@ -62,6 +67,7 @@ public class FileSystemSplit {
 
 			String originstr = ns.getString("from");
 			String deststr = ns.getString("to");
+			boolean force = (ns.get("f") == null);
 
 			if (originstr == null || deststr == null){
 				System.err.println("Source and destination files must be specified. Check the --from and the --to parameter.");
@@ -76,6 +82,9 @@ public class FileSystemSplit {
 
 				FileSystem originfs = FileSystem.get( originuri, conf ) ;
 				FileStatus source = originfs.getFileStatus(new Path(originstr));
+
+				FileSystem destfs = FileSystem.get( desturi, conf ) ;
+				FileStatus destination = destfs.getFileStatus(new Path(deststr));
 				
 				if (source == null){
 					System.err.println("Source file must exist. Check --from parameter.");
@@ -83,6 +92,11 @@ public class FileSystemSplit {
 				}
 				if (source.isDirectory()) {
 					System.err.println("Source must be a file. Check --from parameter.");
+					System.exit(4);
+				}
+
+				if (destination != null && !force){
+					System.err.println("Destination file exist use the force\u2122 parameter to replace.");
 					System.exit(4);
 				}
 
@@ -113,6 +127,8 @@ public class FileSystemSplit {
 				long startbyte = length * start;
 				long endbyte = length * until;
 
+				out = destfs.create(name);
+
 				in = originfs.open(new Path( originuri) );
 
 				FSDataInputStream fis = new FSDataInputStream(in);
@@ -120,15 +136,16 @@ public class FileSystemSplit {
 				
 				//@loksly: this is one example of how Java method overloading can be bad used.
 				//check: https://hadoop.apache.org/docs/r2.6.1/api/index.html?org/apache/hadoop/io/IOUtils.html
-				//you can see that if the third parameter is a long then it means the number of bytes to copy.
-				IOUtils.copyBytes( fis, System.out, endbyte - startbyte, true );
+				//you can see that if the third parameter is a long then it means the number of bytes to copy instead of buffer size.
+				IOUtils.copyBytes( fis, out, endbyte - startbyte, true );
 
 			}catch(Exception e){
 				System.err.println(e);
 				System.exit(100);
 			} finally {
 				if (in != null){
-					IOUtils.closeStream( in ) ;
+					IOUtils.closeStream( in );
+					IOUtils.closeStream( out );
 				}
 			}
 	}
