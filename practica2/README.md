@@ -25,7 +25,7 @@ curl -s http://loripsum.net/api/10000/verylong/plaintext | xargs yes | head -n 1
 - [x] Utiliza FileSystemCat para ver el fichero.
 
 ```bash
-wget https://github.com/Loksly/tcdm_2016/raw/master/practica2/filesystemcat.sh
+o
 bash filesystemcat.sh
 
 ```
@@ -156,6 +156,12 @@ Un documento que muestre el efecto de las cuotas y la salida del chequeo. Pueden
 - [x] Compilación del ejemplo
 
 ```bash
+
+sudo apt-get install git ant openjdk-8-jdk
+wget https://github.com/Loksly/tcdm_2016/archive/master.zip
+unzip master.zip
+cd tcdm_2016/practica2
+ant -buildfile ant.xml
 
 mvn clean
 mvn package
