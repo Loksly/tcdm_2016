@@ -510,7 +510,6 @@ public class FileSystemSplit {
 				if (out != null){
 					IOUtils.closeStream( out );
 				}
-				}
 			}
 	}
 }
