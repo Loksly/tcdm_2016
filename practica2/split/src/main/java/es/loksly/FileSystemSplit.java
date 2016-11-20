@@ -163,6 +163,8 @@ public class FileSystemSplit {
 			} finally {
 				if (in != null){
 					IOUtils.closeStream( in );
+				}
+				if (out != null){
 					IOUtils.closeStream( out );
 				}
 			}
