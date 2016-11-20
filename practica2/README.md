@@ -16,26 +16,57 @@ En esta práctica estudiaremos el acceso programático a HDFS.
 
 ```bash
 #Fichero de 14MB
-curl -s http://loripsum.net/api/10000/verylong/plaintext | hdfs dfs -put - filesystemcattest
+curl -s http://loripsum.net/api/10000/verylong/plaintext | hdfs dfs -put - hdfs:///tmp/filesystemcattest
 
 #Fichero de 2GB
-curl -s http://loripsum.net/api/10000/verylong/plaintext | xargs yes | head -n 100000 | hdfs dfs -put - filesystemcattest
+curl -s http://loripsum.net/api/10000/verylong/plaintext | xargs yes | head -n 100000 | hdfs dfs -put - hdfs:///tmp/filesystemcattest
+
+#comprobar que se ha creado
+hdfs dfs -ls hdfs:///tmp/filesystemcattest
 ```
 
 - [x] Utiliza FileSystemCat para ver el fichero.
 
 ```bash
-o
+wget -q https://github.com/Loksly/tcdm_2016/raw/master/practica2/filesystemcat.sh
 bash filesystemcat.sh
 
 ```
+Como muestra demasiada salida para realizar la comparación, podemos hacer lo siguiente:
+
+```bash
+hdmaster@NameNode:/tmp$ bash filesystemcat.sh |md5sum
+# b6fdc713170d7d3a35ae89dd87b6a45e  -
+hdmaster@NameNode:/tmp$ hdfs dfs -cat hdfs:///tmp/filesystemcattest |md5sum
+# b6fdc713170d7d3a35ae89dd87b6a45e  -
+```
+
 - [x] Basándote en el código anterior, escribe un programa que copie la mitad inferior del fichero anterior en el HDFS a otro fichero en otro directorio del HDFS. Usa getFileStatus para obtener la longitud del fichero y seek para saltar a la mitad del mismo.
 
 ```bash
-wget https://github.com/Loksly/tcdm_2016/raw/master/practica2/filesystemsplit.sh
+wget -q https://github.com/Loksly/tcdm_2016/raw/master/practica2/filesystemsplit.sh
 bash filesystemsplit.sh
 
 ```
+
+Nota: para evitar un mensaje de warning _Hadoop “Unable to load native-hadoop library for your platform” warning"_ se puede añadir estas dos líneas en el fichero .bashrc y hacer después un ```source .bashrc```
+```txt
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_PREFIX/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_PREFIX/lib"
+```
+
+Como prueba del funcionamiento puedo mostrar esta captura de pantalla:
+![split](https://github.com/Loksly/tcdm_2016/blob/master/practica2/capturas/half.png)
+
+Nota 2: aunque en el enunciado se pedía una utilidad para dividir por la mitad un fichero es más útil el código desarrollado, y resulta fácil hacer un comando alias que ejecute lo equivalente así:
+
+```bash
+ficheroentrada=$1 #por ejemplo: hdfs:///tmp/filesystemcattest
+ficheroentrada=$2 #por ejemplo: hdfs:///tmp/half
+classpath=`hadoop classpath`:/opt/yarn/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.3.jar
+java -cp $classpath:FileSystemSplit.jar:argparse4j-0.7.0.jar es.loksly.FileSystemSplit -i $ficheroentrada -o $ficherosalida -p 50 -s 50 --progress y
+```
+
 
 - [x] Probar hdfs dfsadmin y hdfs fsck
 ```bash
@@ -153,17 +184,18 @@ Un documento que muestre el efecto de las cuotas y la salida del chequeo. Pueden
 
 ## Opcional plus
 
-- [x] Compilación del ejemplo
+- [x] Compilación del ejemplo en el propio servidor
 
 ```bash
 
 sudo apt-get install git ant openjdk-8-jdk
-wget https://github.com/Loksly/tcdm_2016/archive/master.zip
+wget -q https://github.com/Loksly/tcdm_2016/archive/master.zip
 unzip master.zip
 cd tcdm_2016/practica2
+cd cat
+ant -buildfile ant.xml
+cd ../split
 ant -buildfile ant.xml
 
-mvn clean
-mvn package
 
 ```

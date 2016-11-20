@@ -93,7 +93,7 @@ public class FileSystemSplit {
 				Boolean sourceexists = originfs.exists(new Path(originstr));
 				Boolean destinationexists = destfs.exists(new Path(deststr));
 				
-				if (sourceexists){
+				if (!sourceexists){
 					System.err.println("Source file must exist. Check --in parameter.");
 					System.exit(3);
 				}
@@ -134,8 +134,8 @@ public class FileSystemSplit {
 				}
 
 				long length = source.getLen();
-				long startbyte = length * start;
-				long endbyte = length * until;
+				long startbyte = length * start / 100;
+				long endbyte = length * until / 100;
 
 				if (progress){
 					out = destfs.create(new Path(deststr), new Progressable() {
