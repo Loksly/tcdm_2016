@@ -16,10 +16,10 @@ En esta práctica estudiaremos el acceso programático a HDFS.
 
 ```bash
 #Fichero de 14MB
-curl -O http://loripsum.net/api/10000/verylong/plaintext | hdfs dfs -put /dev/input filesystemcattest
+curl -s http://loripsum.net/api/10000/verylong/plaintext | hdfs dfs -put - filesystemcattest
 
 #Fichero de 2GB
-curl -O http://loripsum.net/api/10000/verylong/plaintext | xargs yes | head -n 100000 | hdfs dfs -put /dev/input filesystemcattest
+curl -s http://loripsum.net/api/10000/verylong/plaintext | xargs yes | head -n 100000 | hdfs dfs -put - filesystemcattest
 ```
 
 - [x] Utiliza FileSystemCat para ver el fichero.
@@ -41,9 +41,62 @@ bash filesystemsplit.sh
 ```bash
 # https://hadoop.apache.org/docs/r1.2.1/commands_manual.html
 hdfs dfsadmin -report
-hdfs fsck
+hdfs fsck .
 hdfs fsck filesystemcattest/plaintext
 ```
+
+El log de salida sería:
+
+```txt
+hdmaster@NameNode:~$ hdfs fsck .
+Connecting to namenode via http://namenode:50070/fsck?ugi=hdmaster&path=%2Fuser%2Fhdmaster
+FSCK started by hdmaster (auth:SIMPLE) from /10.0.0.4 for path /user/hdmaster at Fri Nov 18 17:07:51 UTC 2016
+.........Status: HEALTHY
+ Total size:    2014372924 B
+ Total dirs:    4
+ Total files:   9
+ Total symlinks:                0
+ Total blocks (validated):      33 (avg. block size 61041603 B)
+ Minimally replicated blocks:   33 (100.0 %)
+ Over-replicated blocks:        0 (0.0 %)
+ Under-replicated blocks:       0 (0.0 %)
+ Mis-replicated blocks:         0 (0.0 %)
+ Default replication factor:    3
+ Average block replication:     3.0
+ Corrupt blocks:                0
+ Missing replicas:              0 (0.0 %)
+ Number of data-nodes:          4
+ Number of racks:               2
+FSCK ended at Fri Nov 18 17:07:51 UTC 2016 in 7 milliseconds
+
+
+The filesystem under path '/user/hdmaster' is HEALTHY
+
+hdmaster@NameNode:~$ hdfs fsck filesystemcattest
+Connecting to namenode via http://namenode:50070/fsck?ugi=hdmaster&path=%2Fuser%2Fhdmaster%2Ffilesystemcattest
+FSCK started by hdmaster (auth:SIMPLE) from /10.0.0.4 for path /user/hdmaster/filesystemcattest at Fri Nov 18 17:08:54 UTC 2016
+.Status: HEALTHY
+ Total size:    14372900 B
+ Total dirs:    0
+ Total files:   1
+ Total symlinks:                0
+ Total blocks (validated):      1 (avg. block size 14372900 B)
+ Minimally replicated blocks:   1 (100.0 %)
+ Over-replicated blocks:        0 (0.0 %)
+ Under-replicated blocks:       0 (0.0 %)
+ Mis-replicated blocks:         0 (0.0 %)
+ Default replication factor:    3
+ Average block replication:     3.0
+ Corrupt blocks:                0
+ Missing replicas:              0 (0.0 %)
+ Number of data-nodes:          4
+ Number of racks:               2
+FSCK ended at Fri Nov 18 17:08:54 UTC 2016 in 1 milliseconds
+
+
+The filesystem under path '/user/hdmaster/filesystemcattest' is HEALTHY
+```
+
 
 - [x] Crea un directorio en HDFS y ponle una cuota de solo 2 ficheros. Prueba a copiar más de dos ficheros a ese directorio. Haz un chequeo de todo el HDFS.
 ```bash
@@ -96,3 +149,15 @@ Un documento que muestre el efecto de las cuotas y la salida del chequeo. Pueden
 ## Parte opcional:
 
 - [x] 1. Documento en el que se indiquen los comandos usados con el WebHDFS para crear directorios y ficheros y el resultado obtenido.
+
+
+## Opcional plus
+
+- [x] Compilación del ejemplo
+
+```bash
+
+mvn clean
+mvn package
+
+```
