@@ -1,6 +1,6 @@
 
 # Práctica 2: Hadoop - Uso de HDFS
-### El contenido de este documento está disponible en https://github.com/Loksly/tcdm_2016/practica2
+### El contenido de este documento está disponible en https://github.com/Loksly/tcdm_2016/tree/master/practica2
 
 ## Introducción
 
