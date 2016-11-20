@@ -265,6 +265,8 @@ Connection: close
 hdmaster@NameNode:/tmp$ hdfs dfs -ls hdfs:///user/loksly/testdirectory/testfile
 -rwxr-xr-x   3 loksly supergroup   14484102 2016-11-20 17:18 hdfs:///user/loksly/testdirectory/testfile
 
+```
+
 === Fuentes
 
 http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Make_a_Directory
