@@ -87,24 +87,27 @@ public class FileSystemSplit {
 				URI originuri = URI.create(originstr);
 				URI desturi = URI.create(deststr);
 
-				FileSystem originfs = FileSystem.get( originuri, conf ) ;
-				FileStatus source = originfs.getFileStatus(new Path(originstr));
-
-				FileSystem destfs = FileSystem.get( desturi, conf ) ;
-				FileStatus destination = destfs.getFileStatus(new Path(deststr));
+				FileSystem originfs = FileSystem.get( originuri, conf );
+				FileSystem destfs = FileSystem.get( desturi, conf );
 				
-				if (source == null){
+				Boolean sourceexists = originfs.exists(new Path(originstr));
+				Boolean destinationexists = destfs.exists(new Path(deststr));
+				
+				if (sourceexists){
 					System.err.println("Source file must exist. Check --in parameter.");
 					System.exit(3);
 				}
-				if (source.isDirectory()) {
-					System.err.println("Source must be a file. Check --in parameter.");
+
+				if (destinationexists && !force){
+					System.err.println("Destination file exist use the force\u2122 parameter to replace.");
 					System.exit(4);
 				}
 
-				if (destination != null && !force){
-					System.err.println("Destination file exist use the force\u2122 parameter to replace.");
-					System.exit(4);
+				FileStatus source = originfs.getFileStatus(new Path(originstr));
+
+				if (source.isDirectory()) {
+					System.err.println("Source must be a file. Check --in parameter.");
+					System.exit(5);
 				}
 
 				int percentage = ns.getInt("percentage");
@@ -113,11 +116,11 @@ public class FileSystemSplit {
 
 				if (start < 0){
 					System.err.println("Bad start percentage. Check --start parameter.");
-					System.exit(5);
+					System.exit(6);
 				}
 				if (percentage < 0){
 					System.err.println("Bad percentage. Check --percentage parameter.");
-					System.exit(6);
+					System.exit(7);
 				}
 				if (start > 100){
 					start = 100;
