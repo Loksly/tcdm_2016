@@ -25,6 +25,7 @@ public class CPMapper extends Mapper<LongWritable, Text, Text, Text> {
 	public void map(LongWritable key, Text value, Context context)
 		throws IOException, InterruptedException {
 
+			if (key.get() == 0){ return; }
 			String[] split = value.toString().split(",");
 			context.write(new Text(split[1]), new Text(split[0]));
 		}

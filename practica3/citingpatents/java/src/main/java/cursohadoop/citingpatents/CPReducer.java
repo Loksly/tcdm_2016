@@ -17,7 +17,7 @@ public class CPReducer extends Reducer<Text, Text, Text, Text> {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private Text cite = new Text();
+
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context)
 		throws IOException, InterruptedException {
@@ -25,11 +25,10 @@ public class CPReducer extends Reducer<Text, Text, Text, Text> {
 			StringBuilder sb = new StringBuilder();
 			for (Text value : values) {
 				if (sb.length() > 0 ){
-					sb.append(" ");
+					sb.append(",");
 				}
 				sb.append(value);
 			}
-			cite.set(sb.toString());
-			context.write(key, cite );
+			context.write(key, new Text(sb.toString()));
 		}
 }
