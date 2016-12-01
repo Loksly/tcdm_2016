@@ -14,6 +14,13 @@
   * La salida debe de guardarla en formato comprimido gzip.
   * Utilizad los métodos estáticos setCompressOutput y setOutputCompressorClass de la clase FileOutputFormat
 
+### Carga de datos de prueba
+```bash
+$ wget -q https://github.com/Loksly/tcdm_2016/raw/master/practica3/datos.tgz
+$ tar xvfz datos.tgz
+$ hdfs dfs -put datos
+```
+
 ## Versión Java
 
 ### Compilación
@@ -40,10 +47,50 @@ $ mv target/CitationNumberByPatent-0.0.1-SNAPSHOT.jar CitationNumberByPatent.jar
 #### Ejecución
 
 ```bash
-$ wget -q https://github.com/Loksly/tcdm_2016/raw/master/practica3/datos.tgz
-$ tar xvfz datos.tgz
-$ hdfs dfs -put datos hdfs:///tmp/citationtest
-$ hdfs dfs -rm -r hdfs:///tmp/citingpatents # sólo si es ejecutado por segunda vez
-$ yarn jar CitationNumberByPatent.jar hdfs:///tmp/citationtest/patentes-mini/cite75_99.txt hdfs:///tmp/citingpatents
+$ hdfs dfs -rm -r citingpatents # sólo si es ejecutado por segunda vez
+$ yarn jar CitationNumberByPatent.jar datos/patentes-mini/cite75_99.txt citingpatents
 $ hdfs dfs -get hdfs:///tmp/citingpatents/part-r-00000.gz
 ```
+
+
+
+#### Comentarios
+
+
+He desobedecido explícitamente la recomendación de usar __KeyValueTextInputFormat__ aunque he dejado rastros
+en el código de cómo se utilizaría:
+
+Básicamente tras su importación como:
+
+
+```bash
+import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat
+
+/*
+posteriormente en el método run, bastaría con reemplazar la invocación de
+
+FileInputFormat.addInputPath(job, new Path(arg0[0]));
+
+por:
+ */
+
+KeyValueTextInputFormat.addInputPath(job, new Path(arg0[0]));
+``` 
+
+Y la clase CPMapper sería así:
+
+```java
+public class CPMapper extends Mapper<Text, Text, Text, Text> {
+	@Override
+	public void map(Text key, Text value, Context context)
+		throws IOException, InterruptedException {
+
+			if (key == "\"CITING\""){ return; }
+			String[] split = value.toString().split(",");
+			context.write(new Text(split[1]), new Text(split[0]));
+		}
+}
+```
+
+Sinceramente, me parece más elegante el código sin comprobar se está tratando la primera línea con ese String concreto.
+De ahí que mi solución propuesta sea otra distinta.
