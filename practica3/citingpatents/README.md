@@ -63,8 +63,8 @@ en el código de cómo se utilizaría:
 Básicamente tras su importación como:
 
 
-```bash
-import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat
+```java
+import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 
 /*
 posteriormente en el método run, bastaría con reemplazar la invocación de
