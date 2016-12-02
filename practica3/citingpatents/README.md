@@ -14,12 +14,7 @@
   * La salida debe de guardarla en formato comprimido gzip.
   * Utilizad los métodos estáticos setCompressOutput y setOutputCompressorClass de la clase FileOutputFormat
 
-### Carga de datos de prueba
-```bash
-$ wget -q https://github.com/Loksly/tcdm_2016/raw/master/practica3/datos.tgz
-$ tar xvfz datos.tgz
-$ hdfs dfs -put datos
-```
+
 
 ## Versión Java
 
@@ -49,7 +44,7 @@ $ mv target/CitationNumberByPatent-0.0.1-SNAPSHOT.jar CitationNumberByPatent.jar
 ```bash
 $ hdfs dfs -rm -r citingpatents # sólo si es ejecutado por segunda vez
 $ yarn jar CitationNumberByPatent.jar datos/patentes-mini/cite75_99.txt citingpatents
-$ hdfs dfs -get hdfs:///tmp/citingpatents/part-r-00000.gz
+$ hdfs dfs -get citingpatents/part-r-00000.gz
 ```
 
 
