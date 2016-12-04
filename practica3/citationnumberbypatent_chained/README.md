@@ -25,7 +25,7 @@ $ wget -q -O citationnumberbypatent_chained.jar https://github.com/Loksly/tcdm_2
 
 #### Si se ha realizado la compilación es necesario acceder al fichero jar generado
 ```bash
-$ mv target/citationnumberbypatent_chained-0.0.1-SNAPSHOT citationnumberbypatent_chained.jar
+$ mv target/citationnumberbypatent_chained-0.0.1-SNAPSHOT.jar citationnumberbypatent_chained.jar
 ```
 
 #### Ejecución
