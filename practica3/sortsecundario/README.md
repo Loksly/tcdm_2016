@@ -131,7 +131,7 @@ $ cd tcdm_2016/practica3/sortsecundario/java/
 $ mvn package
 ```
 
-#### Ejecución
+### Ejecución
 
 #### Paso previo opcional, si no se ha realizado la compilación
 ```bash
@@ -143,16 +143,38 @@ $ wget -q -O sortsecundario.jar https://github.com/Loksly/tcdm_2016/raw/master/p
 $ mv target/sortsecundario-0.0.1-SNAPSHOT.jar sortsecundario.jar
 ```
 
-### Ejecución
+#### Ejecución
 
 Supuesto que ya se han subido los ficheros de datos de prueba y que están en el HDFS en el directorio _datos_.
 De no ser así le invito a seguir los pasos descritos en el 
 [apartado](https://github.com/Loksly/tcdm_2016/tree/master/practica3#carga-de-datos-de-prueba)
 relativo a la carga de datos.
-
-```bash
+`
+``bash
 $ hdfs dfs -rm -r sortsecundario # sólo si es ejecutado por segunda vez
 $ yarn jar sortsecundario.jar sequence sortsecundario
 $ hdfs dfs -get sortsecundario/part-r-00000
 ```
 
+
+### Test
+
+A modo de ejemplo se puede ver cuáles son los resultados para España:
+
+```bash
+$ hdfs dfs -cat sortsecundario/part-r-00001 |grep ES
+ES      1969 -> 1
+ES      1970 -> 1
+ES      1976 -> 2
+ES      1977 -> 2
+ES      1978 -> 1
+ES      1979 -> 1
+ES      1980 -> 1
+ES      1982 -> 1
+ES      1987 -> 1
+ES      1988 -> 1
+ES      1989 -> 1
+ES      1994 -> 2
+ES      1995 -> 2
+ES      1999 -> 1
+```
