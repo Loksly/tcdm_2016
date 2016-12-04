@@ -44,4 +44,4 @@ $ hdfs dfs -put datos
 ## Apartados opcionales:
 
 - [x] [countryclaims](https://github.com/Loksly/tcdm_2016/tree/master/practica3/countryclaims)
-- [x] [sortsecundario2](https://github.com/Loksly/tcdm_2016/tree/master/practica3/sortsecundario2)
+- [ ] [sortsecundario2](https://github.com/Loksly/tcdm_2016/tree/master/practica3/sortsecundario2)
