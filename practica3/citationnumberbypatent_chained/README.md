@@ -30,6 +30,11 @@ $ mv target/citationnumberbypatent_chained-0.0.1-SNAPSHOT.jar citationnumberbypa
 
 #### Ejecución
 
+Supuesto que ya se han subido los ficheros de datos de prueba y que están en el HDFS en el directorio _datos_.
+De no ser así le invito a seguir los pasos descritos en el 
+[apartado](https://github.com/Loksly/tcdm_2016/tree/master/practica3#carga-de-datos-de-prueba)
+relativo a la carga de datos.
+
 ```bash
 $ hdfs dfs -rm -r citingpatents2 # sólo si es ejecutado por segunda vez
 $ yarn jar citationnumberbypatent_chained.jar datos/patentes-mini/cite75_99.txt citingpatents2

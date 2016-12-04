@@ -9,8 +9,8 @@ país     año -> no de patentes ese año
 
 Tendremos una línea para cada país/año, por ejemplo: 
 ```txt
-		ES   1963 -> 26 
-		ES   1964 -> 19 
+		ES   1963 -> 26
+		ES   1964 -> 19
 		ES   1965 -> 49
 		...
 ```
@@ -144,6 +144,11 @@ $ mv target/sortsecundario-0.0.1-SNAPSHOT.jar sortsecundario.jar
 ```
 
 ### Ejecución
+
+Supuesto que ya se han subido los ficheros de datos de prueba y que están en el HDFS en el directorio _datos_.
+De no ser así le invito a seguir los pasos descritos en el 
+[apartado](https://github.com/Loksly/tcdm_2016/tree/master/practica3#carga-de-datos-de-prueba)
+relativo a la carga de datos.
 
 ```bash
 $ hdfs dfs -rm -r sortsecundario # sólo si es ejecutado por segunda vez
