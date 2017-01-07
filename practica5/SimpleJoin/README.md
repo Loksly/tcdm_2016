@@ -55,4 +55,3 @@ $ pig -param citas=datos/patentes-mini/cite75_99.txt -param info=datos/patentes-
 $ hdfs dfs -cat dir_salida/part-r-00000
 
 ```
-
