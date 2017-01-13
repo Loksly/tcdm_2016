@@ -1,5 +1,5 @@
 
-## SimpleJoin.pig
+## [Versión PIG](./SimpleJoin.pig)
 
 **Objetivo**: Realiza en pig un Join idéntico al que hicimos en MapReduce (programa "_simplereducesidejoin_").
 Para simplificar, utilizad como entrada los ficheros de texto cite77_99.txt y apat63_99.txt, no el fichero .seq) 
@@ -54,4 +54,23 @@ $ pig -param citas=datos/patentes-mini/cite75_99.txt -param info=datos/patentes-
 ```bash
 $ hdfs dfs -cat dir_salida/part-r-00000
 
+```
+
+
+## [Versión HIVE](./SimpleJoin.hive)
+
+**Objetivo**: Realiza en Hive el mismo Join que en Pig
+
+**Pasos**:
+
+* Busca en la documentación de Hive como crear tablas.
+* Crea tablas para los datos de los ficheros cite75_99.txt y apat63_99.txt.
+* Carga los ficheros en las tablas.
+* Realiza en Join y muestra la salida ordenada por pais y año.
+
+
+```text```
+Nota, he escrito el código pero no consigo ejecutarlo por segunda vez por un problema de configuración
+que ha dejado incosistente la instalación de hive y ahora no termina de arrancar.
+En principio el código debería funcionar pero no tengo forma de comprobarlo.
 ```
