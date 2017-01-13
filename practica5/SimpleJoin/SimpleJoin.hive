@@ -1,0 +1,13 @@
+
+CREATE TABLE IF NOT EXISTS cite (citing INT,  cited INT);
+LOAD DATA LOCAL INPATH 'datos/patentes-mini/cite75_99.txt' OVERWRITE INTO TABLE cite;
+
+CREATE TABLE IF NOT EXISTS apat (patent INT, gyear STRING, gdate STRING, appyear STRING, country STRING, postate STRING, assignee STRING, asscode STRING, claims STRING, nclass STRING, cat STRING, subcat STRING, cmade STRING, creceive STRING, ratiocit STRING, general STRING, original STRING, fwdaplag STRING, bckgtlag STRING, selfctub STRING, selfctlb STRING, secdupbd STRING, secdlwbd STRING);
+LOAD DATA LOCAL INPATH 'datos/patentes-mini/apat63_99.txt' OVERWRITE INTO TABLE apat;
+
+SELECT cited, cites, year, country
+FROM
+    (SELECT cited, count(1) AS cites FROM cite) mapred1
+    JOIN apat
+    ON mapred1.cited = apat.patent
+ORDER BY year, country;

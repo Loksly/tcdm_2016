@@ -12,7 +12,7 @@ Dos programas Pig
 
 ### Parte opcional (puntúa positivamente en la nota final)
 
-- [ ] Programa "SimpleJoin.hive"
+- [x] Programa "SimpleJoin.hive"
 - [ ] Instalación y prueba de OOzie
 
 
