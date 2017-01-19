@@ -19,7 +19,7 @@ Debeis probarlo en el cluster y con varios reducers
     * ``` info = LOAD '$info' USING PigStorage(',') AS (patent:int, year:int, int, int, country:chararray); ```
 * Usar un _FOREACH_ para quedarnos con la patente, el país y el año (yearcountry)
 * Usar el comando _JOIN_ para unir cites y yearcountry por la patente.
-    * ``` joininfo = JOIN cites BY patent, yearcountry BY patent; ```
+    * ``` joininfo = JOIN cites BY patent, yearcountry; ```
 
 * Para que la salida quede mejor, usar un _FOREACH_ para eliminar una de las ocurrencias de patent y ordenar la salida por año:
     * ``` patentinfo = FOREACH joininfo GENERATE cites::patent,country,year,ncites; ```
