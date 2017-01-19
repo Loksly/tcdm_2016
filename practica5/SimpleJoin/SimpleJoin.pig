@@ -21,11 +21,11 @@ info = LOAD '$info' USING PigStorage(',') AS (patent:int, year:int, int, int, co
 
 -- ignore the rest of the fields
 
-yearcountry = FOREACH info GENERATE year, country
+yearcountry = FOREACH info GENERATE year, country;
 
 -- join both contents using patent fields
 
-joininfo = JOIN cites BY patent, yearcountry BY patent;
+joininfo = JOIN cites BY patent, yearcountry;
 
 -- format the output
 
